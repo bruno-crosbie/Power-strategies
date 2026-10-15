@@ -89,6 +89,8 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);font
 </style></head><body><main>
 <h1>Power Strategy Tracker</h1>
 <div class="sub" id="meta"></div>
+<div class="card" style="margin-top:12px">New: <a href="weather-fade.html"><b>Weather fade research</b></a> - week-ahead, month-ahead and quarter-ahead
+weather fades for UK power and NBP gas (backtests; not live-traded here).</div>
 
 <h2>Live paper trading (10 days)</h2>
 <div class="tiles" id="tiles"></div>
