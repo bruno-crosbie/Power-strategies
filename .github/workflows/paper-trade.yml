@@ -2,7 +2,7 @@ name: Paper trade
 
 on:
   schedule:
-    - cron: "2,32 * * * *"   # every 30 min (GitHub may start runs a few minutes late)
+    - cron: "13,43 * * * *"   # every 30 min, off the busy top of the hour (GitHub delays/drops runs near :00)
   workflow_dispatch:
 
 permissions:
