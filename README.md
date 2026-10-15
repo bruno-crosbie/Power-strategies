@@ -3,7 +3,7 @@
 Three GB power trading strategies, backtested on 12 months of Elexon data and paper-traded live for 10 days.
 **No real money. Not financial advice.**
 
-**Live dashboard:** https://bruno-crosbie.github.io/power-strategies/
+**Live dashboard:** https://bruno-crosbie.github.io/Power-strategies/
 
 ## How a trade works
 Each trade is 1 MW for one half-hour settlement period, entered at the Elexon market index price (MID) and settled at the
