@@ -5,6 +5,11 @@ Three GB power trading strategies, backtested on 12 months of Elexon data and pa
 
 **Live dashboard:** https://bruno-crosbie.github.io/Power-strategies/
 
+## Weather fade research
+The [`weather-fade/`](weather-fade/) folder tests whether forward power and gas prices lean too hard on the
+weather, at week-ahead, month-ahead and quarter-ahead horizons. Write-up:
+https://bruno-crosbie.github.io/Power-strategies/weather-fade.html
+
 ## How a trade works
 Each trade is 1 MW for one half-hour settlement period, entered at the Elexon market index price (MID) and settled at the
 system imbalance price (SIP): P&L = position × (SIP − MID) × 0.5 MWh, less an assumed £2/MWh cost. Decisions use only data

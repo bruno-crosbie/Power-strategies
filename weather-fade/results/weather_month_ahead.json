@@ -1,0 +1,3045 @@
+{
+ "key": "weather_month_ahead",
+ "name": "Power & gas: month/quarter-ahead weather fade",
+ "asset": "UK power and NBP gas",
+ "currency": "\u00a3",
+ "unit": "\u00a3100k position per trade",
+ "summary": "Bet that recent unusual weather does not carry into next month: price the next month or quarter from the weather-neutral level and normal weather, and trade against a price anchored on recent spot.",
+ "how_it_works": [
+  "On the 24th of each month, look at the last 2-4 weeks of spot prices and the weather behind them.",
+  "Strip the weather out to get a weather-neutral price level (power: wind/cold/weekday model; gas: cold in GB and the Continent, and GB wind).",
+  "Price next month (or quarter) at that level with normal weather for the time of year: normal wind for that month and normal temperature for each date, from history only.",
+  "A market anchored on recent spot quotes something closer to recent spot. If our fair price differs by 2% or more, trade toward fair.",
+  "Settle against the actual average spot price over the delivery month or quarter.",
+  "Size: \u00a3100k of power or gas at the entry price; costs \u00a31/MWh (power) or 0.5p/therm (gas)."
+ ],
+ "data": [
+  "Elexon daily average power price 2018-2026",
+  "ONS / National Gas daily SAP 2018-2026",
+  "Elexon metered wind and ERA5 observed temperatures (normal weather from history before each decision)"
+ ],
+ "caveats": [
+  "Real month/quarter-ahead quotes are not free: the market price is simulated as anchored 50% or 100% on the last 14 or 28 days of spot.",
+  "Monthly decisions mean few data points: ~49 months tuning (Dec 2018-Dec 2022, including the 2021-22 crisis) and ~45 months test; quarters have a quarter as many.",
+  "Fuel-price trends (e.g. gas in 2021-22) move monthly prices far more than weather does, and this strategy has no view on them.",
+  "Settles against spot averages (daily APX index / SAP), a stand-in for the real contracts' settlement."
+ ],
+ "split": "2023-01-01",
+ "chosen": "power_month: level days 14; power_quarter: level days 14; gas_month: since 2018-03-01; gas_quarter: since 2018-03-01",
+ "stats": {
+  "power_month": {
+   "50% on last 14 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 45,
+     "trades": 26,
+     "longs": 14,
+     "shorts": 12,
+     "pnl": 154489.0,
+     "pnl_per_year": 40334.0,
+     "pnl_per_trade": 5941.9,
+     "hit_rate": 0.423,
+     "t_stat": 0.86,
+     "sharpe": 0.45,
+     "max_drawdown": -152482.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 34,
+     "longs": 20,
+     "shorts": 14,
+     "pnl": 77313.0,
+     "pnl_per_year": 21589.0,
+     "pnl_per_trade": 2273.9,
+     "hit_rate": 0.5,
+     "t_stat": 0.69,
+     "sharpe": 0.36,
+     "max_drawdown": -79086.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 89,
+     "trades": 60,
+     "longs": 34,
+     "shorts": 26,
+     "pnl": 231802.0,
+     "pnl_per_year": 30922.0,
+     "pnl_per_trade": 3863.4,
+     "hit_rate": 0.467,
+     "t_stat": 1.11,
+     "sharpe": 0.41,
+     "max_drawdown": -152482.0
+    }
+   },
+   "100% on last 14 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 45,
+     "trades": 36,
+     "longs": 20,
+     "shorts": 16,
+     "pnl": 261302.0,
+     "pnl_per_year": 68221.0,
+     "pnl_per_trade": 7258.4,
+     "hit_rate": 0.472,
+     "t_stat": 1.27,
+     "sharpe": 0.66,
+     "max_drawdown": -148477.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 37,
+     "longs": 21,
+     "shorts": 16,
+     "pnl": 266541.0,
+     "pnl_per_year": 74430.0,
+     "pnl_per_trade": 7203.8,
+     "hit_rate": 0.622,
+     "t_stat": 2.26,
+     "sharpe": 1.17,
+     "max_drawdown": -62029.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 89,
+     "trades": 73,
+     "longs": 41,
+     "shorts": 32,
+     "pnl": 527843.0,
+     "pnl_per_year": 70414.0,
+     "pnl_per_trade": 7230.7,
+     "hit_rate": 0.548,
+     "t_stat": 2.24,
+     "sharpe": 0.82,
+     "max_drawdown": -148477.0
+    }
+   },
+   "50% on last 28 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 45,
+     "trades": 30,
+     "longs": 18,
+     "shorts": 12,
+     "pnl": 273962.0,
+     "pnl_per_year": 71526.0,
+     "pnl_per_trade": 9132.1,
+     "hit_rate": 0.5,
+     "t_stat": 1.5,
+     "sharpe": 0.77,
+     "max_drawdown": -103752.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 27,
+     "longs": 20,
+     "shorts": 7,
+     "pnl": -99801.0,
+     "pnl_per_year": -27869.0,
+     "pnl_per_trade": -3696.3,
+     "hit_rate": 0.444,
+     "t_stat": -1.16,
+     "sharpe": -0.6,
+     "max_drawdown": -151771.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 89,
+     "trades": 57,
+     "longs": 38,
+     "shorts": 19,
+     "pnl": 174161.0,
+     "pnl_per_year": 23233.0,
+     "pnl_per_trade": 3055.5,
+     "hit_rate": 0.474,
+     "t_stat": 0.85,
+     "sharpe": 0.31,
+     "max_drawdown": -151771.0
+    }
+   },
+   "100% on last 28 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 45,
+     "trades": 41,
+     "longs": 25,
+     "shorts": 16,
+     "pnl": 330551.0,
+     "pnl_per_year": 86300.0,
+     "pnl_per_trade": 8062.2,
+     "hit_rate": 0.512,
+     "t_stat": 1.59,
+     "sharpe": 0.82,
+     "max_drawdown": -133038.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 36,
+     "longs": 27,
+     "shorts": 9,
+     "pnl": 53494.0,
+     "pnl_per_year": 14938.0,
+     "pnl_per_trade": 1486.0,
+     "hit_rate": 0.472,
+     "t_stat": 0.49,
+     "sharpe": 0.26,
+     "max_drawdown": -79873.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 89,
+     "trades": 77,
+     "longs": 52,
+     "shorts": 25,
+     "pnl": 384045.0,
+     "pnl_per_year": 51232.0,
+     "pnl_per_trade": 4987.6,
+     "hit_rate": 0.494,
+     "t_stat": 1.64,
+     "sharpe": 0.6,
+     "max_drawdown": -133038.0
+    }
+   }
+  },
+  "power_quarter": {
+   "50% on last 14 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 14,
+     "trades": 8,
+     "longs": 5,
+     "shorts": 3,
+     "pnl": -3590.0,
+     "pnl_per_year": -956.0,
+     "pnl_per_trade": -448.8,
+     "hit_rate": 0.375,
+     "t_stat": -0.04,
+     "sharpe": -0.02,
+     "max_drawdown": -50779.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 11,
+     "longs": 8,
+     "shorts": 3,
+     "pnl": 6824.0,
+     "pnl_per_year": 2098.0,
+     "pnl_per_trade": 620.4,
+     "hit_rate": 0.545,
+     "t_stat": 0.12,
+     "sharpe": 0.07,
+     "max_drawdown": -22116.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 28,
+     "trades": 19,
+     "longs": 13,
+     "shorts": 6,
+     "pnl": 3234.0,
+     "pnl_per_year": 446.0,
+     "pnl_per_trade": 170.2,
+     "hit_rate": 0.474,
+     "t_stat": 0.03,
+     "sharpe": 0.01,
+     "max_drawdown": -50779.0
+    }
+   },
+   "100% on last 14 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 14,
+     "trades": 12,
+     "longs": 5,
+     "shorts": 7,
+     "pnl": -35738.0,
+     "pnl_per_year": -9521.0,
+     "pnl_per_trade": -2978.2,
+     "hit_rate": 0.333,
+     "t_stat": -0.3,
+     "sharpe": -0.16,
+     "max_drawdown": -124216.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 12,
+     "longs": 8,
+     "shorts": 4,
+     "pnl": 92588.0,
+     "pnl_per_year": 28466.0,
+     "pnl_per_trade": 7715.7,
+     "hit_rate": 0.667,
+     "t_stat": 1.4,
+     "sharpe": 0.75,
+     "max_drawdown": -19388.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 28,
+     "trades": 24,
+     "longs": 13,
+     "shorts": 11,
+     "pnl": 56850.0,
+     "pnl_per_year": 7839.0,
+     "pnl_per_trade": 2368.7,
+     "hit_rate": 0.5,
+     "t_stat": 0.42,
+     "sharpe": 0.16,
+     "max_drawdown": -124216.0
+    }
+   },
+   "50% on last 28 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 14,
+     "trades": 7,
+     "longs": 3,
+     "shorts": 4,
+     "pnl": 207524.0,
+     "pnl_per_year": 55287.0,
+     "pnl_per_trade": 29646.3,
+     "hit_rate": 0.714,
+     "t_stat": 2.16,
+     "sharpe": 1.02,
+     "max_drawdown": -18414.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 8,
+     "longs": 6,
+     "shorts": 2,
+     "pnl": 6136.0,
+     "pnl_per_year": 1886.0,
+     "pnl_per_trade": 767.0,
+     "hit_rate": 0.375,
+     "t_stat": 0.16,
+     "sharpe": 0.09,
+     "max_drawdown": -20576.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 28,
+     "trades": 15,
+     "longs": 9,
+     "shorts": 6,
+     "pnl": 213660.0,
+     "pnl_per_year": 29460.0,
+     "pnl_per_trade": 14244.0,
+     "hit_rate": 0.533,
+     "t_stat": 1.85,
+     "sharpe": 0.68,
+     "max_drawdown": -20576.0
+    }
+   },
+   "100% on last 28 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 14,
+     "trades": 13,
+     "longs": 8,
+     "shorts": 5,
+     "pnl": 197568.0,
+     "pnl_per_year": 52634.0,
+     "pnl_per_trade": 15197.6,
+     "hit_rate": 0.462,
+     "t_stat": 1.37,
+     "sharpe": 0.73,
+     "max_drawdown": -56259.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 9,
+     "longs": 7,
+     "shorts": 2,
+     "pnl": 78470.0,
+     "pnl_per_year": 24125.0,
+     "pnl_per_trade": 8718.9,
+     "hit_rate": 0.667,
+     "t_stat": 1.76,
+     "sharpe": 0.9,
+     "max_drawdown": -13408.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 28,
+     "trades": 22,
+     "longs": 15,
+     "shorts": 7,
+     "pnl": 276038.0,
+     "pnl_per_year": 38061.0,
+     "pnl_per_trade": 12547.2,
+     "hit_rate": 0.545,
+     "t_stat": 1.85,
+     "sharpe": 0.69,
+     "max_drawdown": -56259.0
+    }
+   }
+  },
+  "gas_month": {
+   "50% on last 14 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 47,
+     "trades": 34,
+     "longs": 14,
+     "shorts": 20,
+     "pnl": 267371.0,
+     "pnl_per_year": 69805.0,
+     "pnl_per_trade": 7863.9,
+     "hit_rate": 0.588,
+     "t_stat": 1.55,
+     "sharpe": 0.78,
+     "max_drawdown": -72812.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 23,
+     "longs": 13,
+     "shorts": 10,
+     "pnl": -28429.0,
+     "pnl_per_year": -7938.0,
+     "pnl_per_trade": -1236.0,
+     "hit_rate": 0.478,
+     "t_stat": -0.44,
+     "sharpe": -0.23,
+     "max_drawdown": -75302.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 91,
+     "trades": 57,
+     "longs": 27,
+     "shorts": 30,
+     "pnl": 238943.0,
+     "pnl_per_year": 31875.0,
+     "pnl_per_trade": 4192.0,
+     "hit_rate": 0.544,
+     "t_stat": 1.28,
+     "sharpe": 0.46,
+     "max_drawdown": -75302.0
+    }
+   },
+   "100% on last 14 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 47,
+     "trades": 38,
+     "longs": 17,
+     "shorts": 21,
+     "pnl": 639215.0,
+     "pnl_per_year": 166886.0,
+     "pnl_per_trade": 16821.4,
+     "hit_rate": 0.658,
+     "t_stat": 2.68,
+     "sharpe": 1.33,
+     "max_drawdown": -53431.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 33,
+     "longs": 20,
+     "shorts": 13,
+     "pnl": 120405.0,
+     "pnl_per_year": 33622.0,
+     "pnl_per_trade": 3648.6,
+     "hit_rate": 0.576,
+     "t_stat": 1.59,
+     "sharpe": 0.82,
+     "max_drawdown": -55671.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 91,
+     "trades": 71,
+     "longs": 37,
+     "shorts": 34,
+     "pnl": 759620.0,
+     "pnl_per_year": 101334.0,
+     "pnl_per_trade": 10698.9,
+     "hit_rate": 0.62,
+     "t_stat": 2.98,
+     "sharpe": 1.07,
+     "max_drawdown": -55671.0
+    }
+   },
+   "50% on last 28 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 47,
+     "trades": 34,
+     "longs": 16,
+     "shorts": 18,
+     "pnl": 568796.0,
+     "pnl_per_year": 148501.0,
+     "pnl_per_trade": 16729.3,
+     "hit_rate": 0.676,
+     "t_stat": 2.31,
+     "sharpe": 1.14,
+     "max_drawdown": -85410.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 35,
+     "longs": 18,
+     "shorts": 17,
+     "pnl": -80066.0,
+     "pnl_per_year": -22358.0,
+     "pnl_per_trade": -2287.6,
+     "hit_rate": 0.486,
+     "t_stat": -0.79,
+     "sharpe": -0.41,
+     "max_drawdown": -175541.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 91,
+     "trades": 69,
+     "longs": 34,
+     "shorts": 35,
+     "pnl": 488730.0,
+     "pnl_per_year": 65197.0,
+     "pnl_per_trade": 7083.0,
+     "hit_rate": 0.58,
+     "t_stat": 1.77,
+     "sharpe": 0.64,
+     "max_drawdown": -175541.0
+    }
+   },
+   "100% on last 28 days": {
+    "selection": {
+     "from": "2019-02-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 47,
+     "trades": 41,
+     "longs": 19,
+     "shorts": 22,
+     "pnl": 921533.0,
+     "pnl_per_year": 240593.0,
+     "pnl_per_trade": 22476.4,
+     "hit_rate": 0.732,
+     "t_stat": 3.63,
+     "sharpe": 1.8,
+     "max_drawdown": -65704.0
+    },
+    "holdout": {
+     "from": "2023-01-24",
+     "to": "2026-08-24",
+     "years": 3.6,
+     "decisions": 44,
+     "trades": 41,
+     "longs": 22,
+     "shorts": 19,
+     "pnl": 162951.0,
+     "pnl_per_year": 45503.0,
+     "pnl_per_trade": 3974.4,
+     "hit_rate": 0.561,
+     "t_stat": 1.58,
+     "sharpe": 0.83,
+     "max_drawdown": -90493.0
+    },
+    "all": {
+     "from": "2019-02-24",
+     "to": "2026-08-24",
+     "years": 7.5,
+     "decisions": 91,
+     "trades": 82,
+     "longs": 41,
+     "shorts": 41,
+     "pnl": 1084484.0,
+     "pnl_per_year": 144670.0,
+     "pnl_per_trade": 13225.4,
+     "hit_rate": 0.646,
+     "t_stat": 3.81,
+     "sharpe": 1.37,
+     "max_drawdown": -90493.0
+    }
+   }
+  },
+  "gas_quarter": {
+   "50% on last 14 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 16,
+     "trades": 10,
+     "longs": 4,
+     "shorts": 6,
+     "pnl": 225439.0,
+     "pnl_per_year": 60060.0,
+     "pnl_per_trade": 22543.9,
+     "hit_rate": 0.8,
+     "t_stat": 1.85,
+     "sharpe": 0.88,
+     "max_drawdown": -56104.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 9,
+     "longs": 6,
+     "shorts": 3,
+     "pnl": 16378.0,
+     "pnl_per_year": 5035.0,
+     "pnl_per_trade": 1819.7,
+     "hit_rate": 0.556,
+     "t_stat": 0.22,
+     "sharpe": 0.12,
+     "max_drawdown": -47212.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 30,
+     "trades": 19,
+     "longs": 10,
+     "shorts": 9,
+     "pnl": 241817.0,
+     "pnl_per_year": 33342.0,
+     "pnl_per_trade": 12727.2,
+     "hit_rate": 0.684,
+     "t_stat": 1.65,
+     "sharpe": 0.59,
+     "max_drawdown": -56104.0
+    }
+   },
+   "100% on last 14 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 16,
+     "trades": 14,
+     "longs": 7,
+     "shorts": 7,
+     "pnl": 342017.0,
+     "pnl_per_year": 91117.0,
+     "pnl_per_trade": 24429.8,
+     "hit_rate": 0.786,
+     "t_stat": 2.43,
+     "sharpe": 1.19,
+     "max_drawdown": -44313.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 11,
+     "longs": 7,
+     "shorts": 4,
+     "pnl": 32684.0,
+     "pnl_per_year": 10049.0,
+     "pnl_per_trade": 2971.3,
+     "hit_rate": 0.545,
+     "t_stat": 0.41,
+     "sharpe": 0.22,
+     "max_drawdown": -44013.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 30,
+     "trades": 25,
+     "longs": 14,
+     "shorts": 11,
+     "pnl": 374700.0,
+     "pnl_per_year": 51665.0,
+     "pnl_per_trade": 14988.0,
+     "hit_rate": 0.68,
+     "t_stat": 2.23,
+     "sharpe": 0.8,
+     "max_drawdown": -44313.0
+    }
+   },
+   "50% on last 28 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 16,
+     "trades": 15,
+     "longs": 8,
+     "shorts": 7,
+     "pnl": 432278.0,
+     "pnl_per_year": 115164.0,
+     "pnl_per_trade": 28818.5,
+     "hit_rate": 0.867,
+     "t_stat": 3.25,
+     "sharpe": 1.59,
+     "max_drawdown": -53782.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 11,
+     "longs": 7,
+     "shorts": 4,
+     "pnl": 28446.0,
+     "pnl_per_year": 8746.0,
+     "pnl_per_trade": 2586.0,
+     "hit_rate": 0.545,
+     "t_stat": 0.38,
+     "sharpe": 0.21,
+     "max_drawdown": -54324.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 30,
+     "trades": 26,
+     "longs": 15,
+     "shorts": 11,
+     "pnl": 460724.0,
+     "pnl_per_year": 63526.0,
+     "pnl_per_trade": 17720.1,
+     "hit_rate": 0.731,
+     "t_stat": 2.8,
+     "sharpe": 1.01,
+     "max_drawdown": -54324.0
+    }
+   },
+   "100% on last 28 days": {
+    "selection": {
+     "from": "2019-03-24",
+     "to": "2022-12-24",
+     "years": 3.8,
+     "decisions": 16,
+     "trades": 15,
+     "longs": 8,
+     "shorts": 7,
+     "pnl": 557371.0,
+     "pnl_per_year": 148490.0,
+     "pnl_per_trade": 37158.0,
+     "hit_rate": 0.867,
+     "t_stat": 3.91,
+     "sharpe": 1.9,
+     "max_drawdown": -46768.0
+    },
+    "holdout": {
+     "from": "2023-03-24",
+     "to": "2026-06-24",
+     "years": 3.3,
+     "decisions": 14,
+     "trades": 11,
+     "longs": 7,
+     "shorts": 4,
+     "pnl": 93083.0,
+     "pnl_per_year": 28618.0,
+     "pnl_per_trade": 8462.1,
+     "hit_rate": 0.636,
+     "t_stat": 1.26,
+     "sharpe": 0.67,
+     "max_drawdown": -45074.0
+    },
+    "all": {
+     "from": "2019-03-24",
+     "to": "2026-06-24",
+     "years": 7.3,
+     "decisions": 30,
+     "trades": 26,
+     "longs": 15,
+     "shorts": 11,
+     "pnl": 650454.0,
+     "pnl_per_year": 89686.0,
+     "pnl_per_trade": 25017.4,
+     "hit_rate": 0.769,
+     "t_stat": 3.74,
+     "sharpe": 1.32,
+     "max_drawdown": -46768.0
+    }
+   }
+  }
+ },
+ "grid": [],
+ "curve": {
+  "power month (market fully anchored, 14 days)": [
+   [
+    "2019-02-28",
+    -11855.0
+   ],
+   [
+    "2019-03-31",
+    -16454.0
+   ],
+   [
+    "2019-04-30",
+    -24074.0
+   ],
+   [
+    "2019-05-31",
+    -24074.0
+   ],
+   [
+    "2019-06-30",
+    -23359.0
+   ],
+   [
+    "2019-07-31",
+    -23359.0
+   ],
+   [
+    "2019-08-31",
+    -23359.0
+   ],
+   [
+    "2019-09-30",
+    -28095.0
+   ],
+   [
+    "2019-10-31",
+    -48992.0
+   ],
+   [
+    "2019-11-30",
+    -48992.0
+   ],
+   [
+    "2019-12-31",
+    -62187.0
+   ],
+   [
+    "2020-01-31",
+    -85233.0
+   ],
+   [
+    "2020-02-29",
+    -89114.0
+   ],
+   [
+    "2020-03-31",
+    -113388.0
+   ],
+   [
+    "2020-04-30",
+    -113388.0
+   ],
+   [
+    "2020-05-31",
+    -113388.0
+   ],
+   [
+    "2020-06-30",
+    -113388.0
+   ],
+   [
+    "2020-07-31",
+    -141041.0
+   ],
+   [
+    "2020-08-31",
+    -160333.0
+   ],
+   [
+    "2020-09-30",
+    -157266.0
+   ],
+   [
+    "2020-10-31",
+    -157266.0
+   ],
+   [
+    "2020-11-30",
+    -113919.0
+   ],
+   [
+    "2020-12-31",
+    -66471.0
+   ],
+   [
+    "2021-01-31",
+    -66471.0
+   ],
+   [
+    "2021-02-28",
+    -68029.0
+   ],
+   [
+    "2021-03-31",
+    -45615.0
+   ],
+   [
+    "2021-04-30",
+    -47167.0
+   ],
+   [
+    "2021-05-31",
+    -53652.0
+   ],
+   [
+    "2021-06-30",
+    -53652.0
+   ],
+   [
+    "2021-07-31",
+    -64465.0
+   ],
+   [
+    "2021-08-31",
+    -128854.0
+   ],
+   [
+    "2021-09-30",
+    -126866.0
+   ],
+   [
+    "2021-10-31",
+    -122172.0
+   ],
+   [
+    "2021-11-30",
+    -122172.0
+   ],
+   [
+    "2021-12-31",
+    -88271.0
+   ],
+   [
+    "2022-01-31",
+    -70864.0
+   ],
+   [
+    "2022-02-28",
+    -18777.0
+   ],
+   [
+    "2022-03-31",
+    -32592.0
+   ],
+   [
+    "2022-04-30",
+    -55468.0
+   ],
+   [
+    "2022-05-31",
+    7.0
+   ],
+   [
+    "2022-06-30",
+    49910.0
+   ],
+   [
+    "2022-07-31",
+    5733.0
+   ],
+   [
+    "2022-08-31",
+    34477.0
+   ],
+   [
+    "2022-09-30",
+    89930.0
+   ],
+   [
+    "2022-10-31",
+    100315.0
+   ],
+   [
+    "2022-11-30",
+    207629.0
+   ],
+   [
+    "2022-12-31",
+    261302.0
+   ],
+   [
+    "2023-01-31",
+    261954.0
+   ],
+   [
+    "2023-02-28",
+    250873.0
+   ],
+   [
+    "2023-03-31",
+    235679.0
+   ],
+   [
+    "2023-04-30",
+    235679.0
+   ],
+   [
+    "2023-05-31",
+    227718.0
+   ],
+   [
+    "2023-06-30",
+    227718.0
+   ],
+   [
+    "2023-07-31",
+    227718.0
+   ],
+   [
+    "2023-08-31",
+    227718.0
+   ],
+   [
+    "2023-09-30",
+    224902.0
+   ],
+   [
+    "2023-10-31",
+    224401.0
+   ],
+   [
+    "2023-11-30",
+    199925.0
+   ],
+   [
+    "2023-12-31",
+    214038.0
+   ],
+   [
+    "2024-01-31",
+    236981.0
+   ],
+   [
+    "2024-02-29",
+    240592.0
+   ],
+   [
+    "2024-03-31",
+    222010.0
+   ],
+   [
+    "2024-04-30",
+    276368.0
+   ],
+   [
+    "2024-05-31",
+    277077.0
+   ],
+   [
+    "2024-06-30",
+    283977.0
+   ],
+   [
+    "2024-07-31",
+    304226.0
+   ],
+   [
+    "2024-08-31",
+    353407.0
+   ],
+   [
+    "2024-09-30",
+    342183.0
+   ],
+   [
+    "2024-10-31",
+    342183.0
+   ],
+   [
+    "2024-11-30",
+    350772.0
+   ],
+   [
+    "2024-12-31",
+    384068.0
+   ],
+   [
+    "2025-01-31",
+    396277.0
+   ],
+   [
+    "2025-02-28",
+    385906.0
+   ],
+   [
+    "2025-03-31",
+    406453.0
+   ],
+   [
+    "2025-04-30",
+    406453.0
+   ],
+   [
+    "2025-05-31",
+    406453.0
+   ],
+   [
+    "2025-06-30",
+    413762.0
+   ],
+   [
+    "2025-07-31",
+    426295.0
+   ],
+   [
+    "2025-08-31",
+    446639.0
+   ],
+   [
+    "2025-09-30",
+    482084.0
+   ],
+   [
+    "2025-10-31",
+    495995.0
+   ],
+   [
+    "2025-11-30",
+    489462.0
+   ],
+   [
+    "2025-12-31",
+    522626.0
+   ],
+   [
+    "2026-01-31",
+    506706.0
+   ],
+   [
+    "2026-02-28",
+    531658.0
+   ],
+   [
+    "2026-03-31",
+    513366.0
+   ],
+   [
+    "2026-04-30",
+    540872.0
+   ],
+   [
+    "2026-05-31",
+    531688.0
+   ],
+   [
+    "2026-06-30",
+    537471.0
+   ],
+   [
+    "2026-07-31",
+    523286.0
+   ],
+   [
+    "2026-08-31",
+    527843.0
+   ]
+  ],
+  "gas month (market fully anchored, 14 days)": [
+   [
+    "2019-02-28",
+    -0.0
+   ],
+   [
+    "2019-03-31",
+    6805.0
+   ],
+   [
+    "2019-04-30",
+    16699.0
+   ],
+   [
+    "2019-05-31",
+    26726.0
+   ],
+   [
+    "2019-06-30",
+    24074.0
+   ],
+   [
+    "2019-07-31",
+    34756.0
+   ],
+   [
+    "2019-08-31",
+    41232.0
+   ],
+   [
+    "2019-09-30",
+    41746.0
+   ],
+   [
+    "2019-10-31",
+    83142.0
+   ],
+   [
+    "2019-11-30",
+    64484.0
+   ],
+   [
+    "2019-12-31",
+    50911.0
+   ],
+   [
+    "2020-01-31",
+    67632.0
+   ],
+   [
+    "2020-02-29",
+    64076.0
+   ],
+   [
+    "2020-03-31",
+    101677.0
+   ],
+   [
+    "2020-04-30",
+    109714.0
+   ],
+   [
+    "2020-05-31",
+    94556.0
+   ],
+   [
+    "2020-06-30",
+    94556.0
+   ],
+   [
+    "2020-07-31",
+    94556.0
+   ],
+   [
+    "2020-08-31",
+    94556.0
+   ],
+   [
+    "2020-09-30",
+    125896.0
+   ],
+   [
+    "2020-10-31",
+    120095.0
+   ],
+   [
+    "2020-11-30",
+    120095.0
+   ],
+   [
+    "2020-12-31",
+    150980.0
+   ],
+   [
+    "2021-01-31",
+    173748.0
+   ],
+   [
+    "2021-02-28",
+    173748.0
+   ],
+   [
+    "2021-03-31",
+    151579.0
+   ],
+   [
+    "2021-04-30",
+    130527.0
+   ],
+   [
+    "2021-05-31",
+    120318.0
+   ],
+   [
+    "2021-06-30",
+    144367.0
+   ],
+   [
+    "2021-07-31",
+    144367.0
+   ],
+   [
+    "2021-08-31",
+    144367.0
+   ],
+   [
+    "2021-09-30",
+    174207.0
+   ],
+   [
+    "2021-10-31",
+    167224.0
+   ],
+   [
+    "2021-11-30",
+    202090.0
+   ],
+   [
+    "2021-12-31",
+    160430.0
+   ],
+   [
+    "2022-01-31",
+    162154.0
+   ],
+   [
+    "2022-02-28",
+    227683.0
+   ],
+   [
+    "2022-03-31",
+    253955.0
+   ],
+   [
+    "2022-04-30",
+    291224.0
+   ],
+   [
+    "2022-05-31",
+    364923.0
+   ],
+   [
+    "2022-06-30",
+    413386.0
+   ],
+   [
+    "2022-07-31",
+    413386.0
+   ],
+   [
+    "2022-08-31",
+    385216.0
+   ],
+   [
+    "2022-09-30",
+    447253.0
+   ],
+   [
+    "2022-10-31",
+    416216.0
+   ],
+   [
+    "2022-11-30",
+    594033.0
+   ],
+   [
+    "2022-12-31",
+    639215.0
+   ],
+   [
+    "2023-01-31",
+    655760.0
+   ],
+   [
+    "2023-02-28",
+    655760.0
+   ],
+   [
+    "2023-03-31",
+    665007.0
+   ],
+   [
+    "2023-04-30",
+    689608.0
+   ],
+   [
+    "2023-05-31",
+    677984.0
+   ],
+   [
+    "2023-06-30",
+    677984.0
+   ],
+   [
+    "2023-07-31",
+    677984.0
+   ],
+   [
+    "2023-08-31",
+    681367.0
+   ],
+   [
+    "2023-09-30",
+    696450.0
+   ],
+   [
+    "2023-10-31",
+    686746.0
+   ],
+   [
+    "2023-11-30",
+    666899.0
+   ],
+   [
+    "2023-12-31",
+    660444.0
+   ],
+   [
+    "2024-01-31",
+    674855.0
+   ],
+   [
+    "2024-02-29",
+    674855.0
+   ],
+   [
+    "2024-03-31",
+    679377.0
+   ],
+   [
+    "2024-04-30",
+    676135.0
+   ],
+   [
+    "2024-05-31",
+    685847.0
+   ],
+   [
+    "2024-06-30",
+    695175.0
+   ],
+   [
+    "2024-07-31",
+    695175.0
+   ],
+   [
+    "2024-08-31",
+    698464.0
+   ],
+   [
+    "2024-09-30",
+    714992.0
+   ],
+   [
+    "2024-10-31",
+    727871.0
+   ],
+   [
+    "2024-11-30",
+    727871.0
+   ],
+   [
+    "2024-12-31",
+    745017.0
+   ],
+   [
+    "2025-01-31",
+    742901.0
+   ],
+   [
+    "2025-02-28",
+    760448.0
+   ],
+   [
+    "2025-03-31",
+    777977.0
+   ],
+   [
+    "2025-04-30",
+    777977.0
+   ],
+   [
+    "2025-05-31",
+    777977.0
+   ],
+   [
+    "2025-06-30",
+    765103.0
+   ],
+   [
+    "2025-07-31",
+    768203.0
+   ],
+   [
+    "2025-08-31",
+    768203.0
+   ],
+   [
+    "2025-09-30",
+    766047.0
+   ],
+   [
+    "2025-10-31",
+    759972.0
+   ],
+   [
+    "2025-11-30",
+    755107.0
+   ],
+   [
+    "2025-12-31",
+    780393.0
+   ],
+   [
+    "2026-01-31",
+    767987.0
+   ],
+   [
+    "2026-02-28",
+    767987.0
+   ],
+   [
+    "2026-03-31",
+    752958.0
+   ],
+   [
+    "2026-04-30",
+    744260.0
+   ],
+   [
+    "2026-05-31",
+    744260.0
+   ],
+   [
+    "2026-06-30",
+    724721.0
+   ],
+   [
+    "2026-07-31",
+    737464.0
+   ],
+   [
+    "2026-08-31",
+    759620.0
+   ]
+  ]
+ },
+ "extra": {
+  "products": {
+   "power_month": {
+    "description": "UK baseload power, next calendar month",
+    "chosen_model": "level days 14",
+    "accuracy": {
+     "selection": {
+      "fair": {
+       "rmse_pct": 27.8,
+       "bias_pct": 2.4,
+       "n": 45
+      },
+      "spot14": {
+       "rmse_pct": 29.7,
+       "bias_pct": 2.7,
+       "n": 45
+      },
+      "spot28": {
+       "rmse_pct": 30.9,
+       "bias_pct": 3.2,
+       "n": 45
+      },
+      "fair_closer_share": 0.444
+     },
+     "holdout": {
+      "fair": {
+       "rmse_pct": 18.1,
+       "bias_pct": -3.1,
+       "n": 44
+      },
+      "spot14": {
+       "rmse_pct": 19.4,
+       "bias_pct": -1.5,
+       "n": 44
+      },
+      "spot28": {
+       "rmse_pct": 16.8,
+       "bias_pct": -0.2,
+       "n": 44
+      },
+      "fair_closer_share": 0.545
+     }
+    },
+    "scenarios": {
+     "50% on last 14 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 45,
+       "trades": 26,
+       "longs": 14,
+       "shorts": 12,
+       "pnl": 154489.0,
+       "pnl_per_year": 40334.0,
+       "pnl_per_trade": 5941.9,
+       "hit_rate": 0.423,
+       "t_stat": 0.86,
+       "sharpe": 0.45,
+       "max_drawdown": -152482.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 34,
+       "longs": 20,
+       "shorts": 14,
+       "pnl": 77313.0,
+       "pnl_per_year": 21589.0,
+       "pnl_per_trade": 2273.9,
+       "hit_rate": 0.5,
+       "t_stat": 0.69,
+       "sharpe": 0.36,
+       "max_drawdown": -79086.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 89,
+       "trades": 60,
+       "longs": 34,
+       "shorts": 26,
+       "pnl": 231802.0,
+       "pnl_per_year": 30922.0,
+       "pnl_per_trade": 3863.4,
+       "hit_rate": 0.467,
+       "t_stat": 1.11,
+       "sharpe": 0.41,
+       "max_drawdown": -152482.0
+      }
+     },
+     "100% on last 14 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 45,
+       "trades": 36,
+       "longs": 20,
+       "shorts": 16,
+       "pnl": 261302.0,
+       "pnl_per_year": 68221.0,
+       "pnl_per_trade": 7258.4,
+       "hit_rate": 0.472,
+       "t_stat": 1.27,
+       "sharpe": 0.66,
+       "max_drawdown": -148477.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 37,
+       "longs": 21,
+       "shorts": 16,
+       "pnl": 266541.0,
+       "pnl_per_year": 74430.0,
+       "pnl_per_trade": 7203.8,
+       "hit_rate": 0.622,
+       "t_stat": 2.26,
+       "sharpe": 1.17,
+       "max_drawdown": -62029.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 89,
+       "trades": 73,
+       "longs": 41,
+       "shorts": 32,
+       "pnl": 527843.0,
+       "pnl_per_year": 70414.0,
+       "pnl_per_trade": 7230.7,
+       "hit_rate": 0.548,
+       "t_stat": 2.24,
+       "sharpe": 0.82,
+       "max_drawdown": -148477.0
+      }
+     },
+     "50% on last 28 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 45,
+       "trades": 30,
+       "longs": 18,
+       "shorts": 12,
+       "pnl": 273962.0,
+       "pnl_per_year": 71526.0,
+       "pnl_per_trade": 9132.1,
+       "hit_rate": 0.5,
+       "t_stat": 1.5,
+       "sharpe": 0.77,
+       "max_drawdown": -103752.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 27,
+       "longs": 20,
+       "shorts": 7,
+       "pnl": -99801.0,
+       "pnl_per_year": -27869.0,
+       "pnl_per_trade": -3696.3,
+       "hit_rate": 0.444,
+       "t_stat": -1.16,
+       "sharpe": -0.6,
+       "max_drawdown": -151771.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 89,
+       "trades": 57,
+       "longs": 38,
+       "shorts": 19,
+       "pnl": 174161.0,
+       "pnl_per_year": 23233.0,
+       "pnl_per_trade": 3055.5,
+       "hit_rate": 0.474,
+       "t_stat": 0.85,
+       "sharpe": 0.31,
+       "max_drawdown": -151771.0
+      }
+     },
+     "100% on last 28 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 45,
+       "trades": 41,
+       "longs": 25,
+       "shorts": 16,
+       "pnl": 330551.0,
+       "pnl_per_year": 86300.0,
+       "pnl_per_trade": 8062.2,
+       "hit_rate": 0.512,
+       "t_stat": 1.59,
+       "sharpe": 0.82,
+       "max_drawdown": -133038.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 36,
+       "longs": 27,
+       "shorts": 9,
+       "pnl": 53494.0,
+       "pnl_per_year": 14938.0,
+       "pnl_per_trade": 1486.0,
+       "hit_rate": 0.472,
+       "t_stat": 0.49,
+       "sharpe": 0.26,
+       "max_drawdown": -79873.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 89,
+       "trades": 77,
+       "longs": 52,
+       "shorts": 25,
+       "pnl": 384045.0,
+       "pnl_per_year": 51232.0,
+       "pnl_per_trade": 4987.6,
+       "hit_rate": 0.494,
+       "t_stat": 1.64,
+       "sharpe": 0.6,
+       "max_drawdown": -133038.0
+      }
+     }
+    },
+    "recent": [
+     {
+      "date": "2025-09-24",
+      "position": 1.0,
+      "entry": 52.9,
+      "fair": 62.58,
+      "outcome": 72.65,
+      "pnl": 35445.87
+     },
+     {
+      "date": "2025-10-24",
+      "position": -1.0,
+      "entry": 89.28,
+      "fair": 82.88,
+      "outcome": 75.86,
+      "pnl": 13910.94
+     },
+     {
+      "date": "2025-11-24",
+      "position": 1.0,
+      "entry": 78.92,
+      "fair": 87.87,
+      "outcome": 74.77,
+      "pnl": -6533.41
+     },
+     {
+      "date": "2025-12-24",
+      "position": 1.0,
+      "entry": 72.16,
+      "fair": 86.07,
+      "outcome": 97.09,
+      "pnl": 33164.44
+     },
+     {
+      "date": "2026-01-24",
+      "position": 1.0,
+      "entry": 93.63,
+      "fair": 99.98,
+      "outcome": 79.72,
+      "pnl": -15920.64
+     },
+     {
+      "date": "2026-02-24",
+      "position": 1.0,
+      "entry": 75.62,
+      "fair": 87.79,
+      "outcome": 95.49,
+      "pnl": 24951.95
+     },
+     {
+      "date": "2026-03-24",
+      "position": 1.0,
+      "entry": 99.4,
+      "fair": 112.18,
+      "outcome": 82.22,
+      "pnl": -18292.1
+     },
+     {
+      "date": "2026-04-24",
+      "position": 1.0,
+      "entry": 81.47,
+      "fair": 86.28,
+      "outcome": 104.87,
+      "pnl": 27506.01
+     },
+     {
+      "date": "2026-05-24",
+      "position": 1.0,
+      "entry": 104.82,
+      "fair": 109.36,
+      "outcome": 96.19,
+      "pnl": -9183.33
+     },
+     {
+      "date": "2026-06-24",
+      "position": 1.0,
+      "entry": 99.54,
+      "fair": 102.51,
+      "outcome": 106.29,
+      "pnl": 5783.12
+     },
+     {
+      "date": "2026-07-24",
+      "position": -1.0,
+      "entry": 114.61,
+      "fair": 107.0,
+      "outcome": 129.87,
+      "pnl": -14185.34
+     },
+     {
+      "date": "2026-08-24",
+      "position": -1.0,
+      "entry": 136.81,
+      "fair": 122.96,
+      "outcome": 129.58,
+      "pnl": 4556.9
+     }
+    ]
+   },
+   "power_quarter": {
+    "description": "UK baseload power, next quarter",
+    "chosen_model": "level days 14",
+    "accuracy": {
+     "selection": {
+      "fair": {
+       "rmse_pct": 36.1,
+       "bias_pct": -4.3,
+       "n": 14
+      },
+      "spot14": {
+       "rmse_pct": 37.0,
+       "bias_pct": -5.3,
+       "n": 14
+      },
+      "spot28": {
+       "rmse_pct": 39.8,
+       "bias_pct": -5.5,
+       "n": 14
+      },
+      "fair_closer_share": 0.286
+     },
+     "holdout": {
+      "fair": {
+       "rmse_pct": 17.3,
+       "bias_pct": -3.7,
+       "n": 14
+      },
+      "spot14": {
+       "rmse_pct": 19.3,
+       "bias_pct": 1.5,
+       "n": 14
+      },
+      "spot28": {
+       "rmse_pct": 18.3,
+       "bias_pct": -0.1,
+       "n": 14
+      },
+      "fair_closer_share": 0.5
+     }
+    },
+    "scenarios": {
+     "50% on last 14 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 14,
+       "trades": 8,
+       "longs": 5,
+       "shorts": 3,
+       "pnl": -3590.0,
+       "pnl_per_year": -956.0,
+       "pnl_per_trade": -448.8,
+       "hit_rate": 0.375,
+       "t_stat": -0.04,
+       "sharpe": -0.02,
+       "max_drawdown": -50779.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 11,
+       "longs": 8,
+       "shorts": 3,
+       "pnl": 6824.0,
+       "pnl_per_year": 2098.0,
+       "pnl_per_trade": 620.4,
+       "hit_rate": 0.545,
+       "t_stat": 0.12,
+       "sharpe": 0.07,
+       "max_drawdown": -22116.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 28,
+       "trades": 19,
+       "longs": 13,
+       "shorts": 6,
+       "pnl": 3234.0,
+       "pnl_per_year": 446.0,
+       "pnl_per_trade": 170.2,
+       "hit_rate": 0.474,
+       "t_stat": 0.03,
+       "sharpe": 0.01,
+       "max_drawdown": -50779.0
+      }
+     },
+     "100% on last 14 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 14,
+       "trades": 12,
+       "longs": 5,
+       "shorts": 7,
+       "pnl": -35738.0,
+       "pnl_per_year": -9521.0,
+       "pnl_per_trade": -2978.2,
+       "hit_rate": 0.333,
+       "t_stat": -0.3,
+       "sharpe": -0.16,
+       "max_drawdown": -124216.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 12,
+       "longs": 8,
+       "shorts": 4,
+       "pnl": 92588.0,
+       "pnl_per_year": 28466.0,
+       "pnl_per_trade": 7715.7,
+       "hit_rate": 0.667,
+       "t_stat": 1.4,
+       "sharpe": 0.75,
+       "max_drawdown": -19388.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 28,
+       "trades": 24,
+       "longs": 13,
+       "shorts": 11,
+       "pnl": 56850.0,
+       "pnl_per_year": 7839.0,
+       "pnl_per_trade": 2368.7,
+       "hit_rate": 0.5,
+       "t_stat": 0.42,
+       "sharpe": 0.16,
+       "max_drawdown": -124216.0
+      }
+     },
+     "50% on last 28 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 14,
+       "trades": 7,
+       "longs": 3,
+       "shorts": 4,
+       "pnl": 207524.0,
+       "pnl_per_year": 55287.0,
+       "pnl_per_trade": 29646.3,
+       "hit_rate": 0.714,
+       "t_stat": 2.16,
+       "sharpe": 1.02,
+       "max_drawdown": -18414.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 8,
+       "longs": 6,
+       "shorts": 2,
+       "pnl": 6136.0,
+       "pnl_per_year": 1886.0,
+       "pnl_per_trade": 767.0,
+       "hit_rate": 0.375,
+       "t_stat": 0.16,
+       "sharpe": 0.09,
+       "max_drawdown": -20576.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 28,
+       "trades": 15,
+       "longs": 9,
+       "shorts": 6,
+       "pnl": 213660.0,
+       "pnl_per_year": 29460.0,
+       "pnl_per_trade": 14244.0,
+       "hit_rate": 0.533,
+       "t_stat": 1.85,
+       "sharpe": 0.68,
+       "max_drawdown": -20576.0
+      }
+     },
+     "100% on last 28 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 14,
+       "trades": 13,
+       "longs": 8,
+       "shorts": 5,
+       "pnl": 197568.0,
+       "pnl_per_year": 52634.0,
+       "pnl_per_trade": 15197.6,
+       "hit_rate": 0.462,
+       "t_stat": 1.37,
+       "sharpe": 0.73,
+       "max_drawdown": -56259.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 9,
+       "longs": 7,
+       "shorts": 2,
+       "pnl": 78470.0,
+       "pnl_per_year": 24125.0,
+       "pnl_per_trade": 8718.9,
+       "hit_rate": 0.667,
+       "t_stat": 1.76,
+       "sharpe": 0.9,
+       "max_drawdown": -13408.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 28,
+       "trades": 22,
+       "longs": 15,
+       "shorts": 7,
+       "pnl": 276038.0,
+       "pnl_per_year": 38061.0,
+       "pnl_per_trade": 12547.2,
+       "hit_rate": 0.545,
+       "t_stat": 1.85,
+       "sharpe": 0.69,
+       "max_drawdown": -56259.0
+      }
+     }
+    },
+    "recent": [
+     {
+      "date": "2023-03-24",
+      "position": 1.0,
+      "entry": 116.04,
+      "fair": 126.01,
+      "outcome": 87.98,
+      "pnl": -25048.53
+     },
+     {
+      "date": "2023-06-24",
+      "position": -1.0,
+      "entry": 95.97,
+      "fair": 91.21,
+      "outcome": 77.17,
+      "pnl": 18540.86
+     },
+     {
+      "date": "2023-12-24",
+      "position": 1.0,
+      "entry": 61.97,
+      "fair": 73.89,
+      "outcome": 64.56,
+      "pnl": 2578.6
+     },
+     {
+      "date": "2024-03-24",
+      "position": 1.0,
+      "entry": 59.67,
+      "fair": 65.35,
+      "outcome": 64.12,
+      "pnl": 5796.41
+     },
+     {
+      "date": "2024-06-24",
+      "position": -1.0,
+      "entry": 76.7,
+      "fair": 71.82,
+      "outcome": 68.31,
+      "pnl": 9632.1
+     },
+     {
+      "date": "2024-09-24",
+      "position": -1.0,
+      "entry": 74.84,
+      "fair": 71.5,
+      "outcome": 88.35,
+      "pnl": -19388.19
+     },
+     {
+      "date": "2024-12-24",
+      "position": 1.0,
+      "entry": 84.84,
+      "fair": 89.75,
+      "outcome": 102.1,
+      "pnl": 19169.63
+     },
+     {
+      "date": "2025-03-24",
+      "position": -1.0,
+      "entry": 97.83,
+      "fair": 94.61,
+      "outcome": 71.2,
+      "pnl": 26194.15
+     },
+     {
+      "date": "2025-06-24",
+      "position": 1.0,
+      "entry": 73.11,
+      "fair": 77.06,
+      "outcome": 72.15,
+      "pnl": -2683.96
+     },
+     {
+      "date": "2025-09-24",
+      "position": 1.0,
+      "entry": 52.9,
+      "fair": 65.49,
+      "outcome": 74.41,
+      "pnl": 38777.1
+     },
+     {
+      "date": "2025-12-24",
+      "position": 1.0,
+      "entry": 72.16,
+      "fair": 84.63,
+      "outcome": 91.13,
+      "pnl": 24913.24
+     },
+     {
+      "date": "2026-03-24",
+      "position": 1.0,
+      "entry": 99.4,
+      "fair": 108.89,
+      "outcome": 94.54,
+      "pnl": -5893.41
+     }
+    ]
+   },
+   "gas_month": {
+    "description": "NBP gas (SAP), next calendar month",
+    "chosen_model": "since 2018-03-01",
+    "accuracy": {
+     "selection": {
+      "fair": {
+       "rmse_pct": 33.9,
+       "bias_pct": 5.8,
+       "n": 47
+      },
+      "spot14": {
+       "rmse_pct": 35.4,
+       "bias_pct": 3.6,
+       "n": 47
+      },
+      "spot28": {
+       "rmse_pct": 37.8,
+       "bias_pct": 3.1,
+       "n": 47
+      },
+      "fair_closer_share": 0.617
+     },
+     "holdout": {
+      "fair": {
+       "rmse_pct": 15.7,
+       "bias_pct": 0.2,
+       "n": 44
+      },
+      "spot14": {
+       "rmse_pct": 15.7,
+       "bias_pct": 0.5,
+       "n": 44
+      },
+      "spot28": {
+       "rmse_pct": 15.4,
+       "bias_pct": 0.4,
+       "n": 44
+      },
+      "fair_closer_share": 0.591
+     }
+    },
+    "scenarios": {
+     "50% on last 14 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 47,
+       "trades": 34,
+       "longs": 14,
+       "shorts": 20,
+       "pnl": 267371.0,
+       "pnl_per_year": 69805.0,
+       "pnl_per_trade": 7863.9,
+       "hit_rate": 0.588,
+       "t_stat": 1.55,
+       "sharpe": 0.78,
+       "max_drawdown": -72812.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 23,
+       "longs": 13,
+       "shorts": 10,
+       "pnl": -28429.0,
+       "pnl_per_year": -7938.0,
+       "pnl_per_trade": -1236.0,
+       "hit_rate": 0.478,
+       "t_stat": -0.44,
+       "sharpe": -0.23,
+       "max_drawdown": -75302.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 91,
+       "trades": 57,
+       "longs": 27,
+       "shorts": 30,
+       "pnl": 238943.0,
+       "pnl_per_year": 31875.0,
+       "pnl_per_trade": 4192.0,
+       "hit_rate": 0.544,
+       "t_stat": 1.28,
+       "sharpe": 0.46,
+       "max_drawdown": -75302.0
+      }
+     },
+     "100% on last 14 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 47,
+       "trades": 38,
+       "longs": 17,
+       "shorts": 21,
+       "pnl": 639215.0,
+       "pnl_per_year": 166886.0,
+       "pnl_per_trade": 16821.4,
+       "hit_rate": 0.658,
+       "t_stat": 2.68,
+       "sharpe": 1.33,
+       "max_drawdown": -53431.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 33,
+       "longs": 20,
+       "shorts": 13,
+       "pnl": 120405.0,
+       "pnl_per_year": 33622.0,
+       "pnl_per_trade": 3648.6,
+       "hit_rate": 0.576,
+       "t_stat": 1.59,
+       "sharpe": 0.82,
+       "max_drawdown": -55671.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 91,
+       "trades": 71,
+       "longs": 37,
+       "shorts": 34,
+       "pnl": 759620.0,
+       "pnl_per_year": 101334.0,
+       "pnl_per_trade": 10698.9,
+       "hit_rate": 0.62,
+       "t_stat": 2.98,
+       "sharpe": 1.07,
+       "max_drawdown": -55671.0
+      }
+     },
+     "50% on last 28 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 47,
+       "trades": 34,
+       "longs": 16,
+       "shorts": 18,
+       "pnl": 568796.0,
+       "pnl_per_year": 148501.0,
+       "pnl_per_trade": 16729.3,
+       "hit_rate": 0.676,
+       "t_stat": 2.31,
+       "sharpe": 1.14,
+       "max_drawdown": -85410.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 35,
+       "longs": 18,
+       "shorts": 17,
+       "pnl": -80066.0,
+       "pnl_per_year": -22358.0,
+       "pnl_per_trade": -2287.6,
+       "hit_rate": 0.486,
+       "t_stat": -0.79,
+       "sharpe": -0.41,
+       "max_drawdown": -175541.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 91,
+       "trades": 69,
+       "longs": 34,
+       "shorts": 35,
+       "pnl": 488730.0,
+       "pnl_per_year": 65197.0,
+       "pnl_per_trade": 7083.0,
+       "hit_rate": 0.58,
+       "t_stat": 1.77,
+       "sharpe": 0.64,
+       "max_drawdown": -175541.0
+      }
+     },
+     "100% on last 28 days": {
+      "selection": {
+       "from": "2019-02-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 47,
+       "trades": 41,
+       "longs": 19,
+       "shorts": 22,
+       "pnl": 921533.0,
+       "pnl_per_year": 240593.0,
+       "pnl_per_trade": 22476.4,
+       "hit_rate": 0.732,
+       "t_stat": 3.63,
+       "sharpe": 1.8,
+       "max_drawdown": -65704.0
+      },
+      "holdout": {
+       "from": "2023-01-24",
+       "to": "2026-08-24",
+       "years": 3.6,
+       "decisions": 44,
+       "trades": 41,
+       "longs": 22,
+       "shorts": 19,
+       "pnl": 162951.0,
+       "pnl_per_year": 45503.0,
+       "pnl_per_trade": 3974.4,
+       "hit_rate": 0.561,
+       "t_stat": 1.58,
+       "sharpe": 0.83,
+       "max_drawdown": -90493.0
+      },
+      "all": {
+       "from": "2019-02-24",
+       "to": "2026-08-24",
+       "years": 7.5,
+       "decisions": 91,
+       "trades": 82,
+       "longs": 41,
+       "shorts": 41,
+       "pnl": 1084484.0,
+       "pnl_per_year": 144670.0,
+       "pnl_per_trade": 13225.4,
+       "hit_rate": 0.646,
+       "t_stat": 3.81,
+       "sharpe": 1.37,
+       "max_drawdown": -90493.0
+      }
+     }
+    },
+    "recent": [
+     {
+      "date": "2025-06-24",
+      "position": 1.0,
+      "entry": 92.57,
+      "fair": 98.28,
+      "outcome": 81.15,
+      "pnl": -12874.15
+     },
+     {
+      "date": "2025-07-24",
+      "position": -1.0,
+      "entry": 82.53,
+      "fair": 80.13,
+      "outcome": 79.47,
+      "pnl": 3100.32
+     },
+     {
+      "date": "2025-09-24",
+      "position": 1.0,
+      "entry": 79.89,
+      "fair": 83.53,
+      "outcome": 78.67,
+      "pnl": -2156.33
+     },
+     {
+      "date": "2025-10-24",
+      "position": 1.0,
+      "entry": 79.37,
+      "fair": 83.27,
+      "outcome": 75.05,
+      "pnl": -6074.66
+     },
+     {
+      "date": "2025-11-24",
+      "position": 1.0,
+      "entry": 74.91,
+      "fair": 77.3,
+      "outcome": 71.77,
+      "pnl": -4865.4
+     },
+     {
+      "date": "2025-12-24",
+      "position": 1.0,
+      "entry": 71.27,
+      "fair": 77.88,
+      "outcome": 89.79,
+      "pnl": 25285.76
+     },
+     {
+      "date": "2026-01-24",
+      "position": 1.0,
+      "entry": 90.88,
+      "fair": 97.24,
+      "outcome": 80.11,
+      "pnl": -12405.88
+     },
+     {
+      "date": "2026-03-24",
+      "position": 1.0,
+      "entry": 133.34,
+      "fair": 137.51,
+      "outcome": 113.8,
+      "pnl": -15028.64
+     },
+     {
+      "date": "2026-04-24",
+      "position": -1.0,
+      "entry": 109.29,
+      "fair": 102.12,
+      "outcome": 118.3,
+      "pnl": -8698.18
+     },
+     {
+      "date": "2026-06-24",
+      "position": -1.0,
+      "entry": 108.7,
+      "fair": 103.91,
+      "outcome": 129.43,
+      "pnl": -19538.68
+     },
+     {
+      "date": "2026-07-24",
+      "position": 1.0,
+      "entry": 133.66,
+      "fair": 142.79,
+      "outcome": 151.19,
+      "pnl": 12743.1
+     },
+     {
+      "date": "2026-08-24",
+      "position": 1.0,
+      "entry": 153.93,
+      "fair": 160.14,
+      "outcome": 188.53,
+      "pnl": 22155.61
+     }
+    ]
+   },
+   "gas_quarter": {
+    "description": "NBP gas (SAP), next quarter",
+    "chosen_model": "since 2018-03-01",
+    "accuracy": {
+     "selection": {
+      "fair": {
+       "rmse_pct": 36.5,
+       "bias_pct": -1.2,
+       "n": 16
+      },
+      "spot14": {
+       "rmse_pct": 43.0,
+       "bias_pct": -2.6,
+       "n": 16
+      },
+      "spot28": {
+       "rmse_pct": 48.8,
+       "bias_pct": -1.7,
+       "n": 16
+      },
+      "fair_closer_share": 0.75
+     },
+     "holdout": {
+      "fair": {
+       "rmse_pct": 18.1,
+       "bias_pct": -0.5,
+       "n": 14
+      },
+      "spot14": {
+       "rmse_pct": 19.4,
+       "bias_pct": 1.3,
+       "n": 14
+      },
+      "spot28": {
+       "rmse_pct": 20.1,
+       "bias_pct": 1.6,
+       "n": 14
+      },
+      "fair_closer_share": 0.571
+     }
+    },
+    "scenarios": {
+     "50% on last 14 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 16,
+       "trades": 10,
+       "longs": 4,
+       "shorts": 6,
+       "pnl": 225439.0,
+       "pnl_per_year": 60060.0,
+       "pnl_per_trade": 22543.9,
+       "hit_rate": 0.8,
+       "t_stat": 1.85,
+       "sharpe": 0.88,
+       "max_drawdown": -56104.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 9,
+       "longs": 6,
+       "shorts": 3,
+       "pnl": 16378.0,
+       "pnl_per_year": 5035.0,
+       "pnl_per_trade": 1819.7,
+       "hit_rate": 0.556,
+       "t_stat": 0.22,
+       "sharpe": 0.12,
+       "max_drawdown": -47212.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 30,
+       "trades": 19,
+       "longs": 10,
+       "shorts": 9,
+       "pnl": 241817.0,
+       "pnl_per_year": 33342.0,
+       "pnl_per_trade": 12727.2,
+       "hit_rate": 0.684,
+       "t_stat": 1.65,
+       "sharpe": 0.59,
+       "max_drawdown": -56104.0
+      }
+     },
+     "100% on last 14 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 16,
+       "trades": 14,
+       "longs": 7,
+       "shorts": 7,
+       "pnl": 342017.0,
+       "pnl_per_year": 91117.0,
+       "pnl_per_trade": 24429.8,
+       "hit_rate": 0.786,
+       "t_stat": 2.43,
+       "sharpe": 1.19,
+       "max_drawdown": -44313.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 11,
+       "longs": 7,
+       "shorts": 4,
+       "pnl": 32684.0,
+       "pnl_per_year": 10049.0,
+       "pnl_per_trade": 2971.3,
+       "hit_rate": 0.545,
+       "t_stat": 0.41,
+       "sharpe": 0.22,
+       "max_drawdown": -44013.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 30,
+       "trades": 25,
+       "longs": 14,
+       "shorts": 11,
+       "pnl": 374700.0,
+       "pnl_per_year": 51665.0,
+       "pnl_per_trade": 14988.0,
+       "hit_rate": 0.68,
+       "t_stat": 2.23,
+       "sharpe": 0.8,
+       "max_drawdown": -44313.0
+      }
+     },
+     "50% on last 28 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 16,
+       "trades": 15,
+       "longs": 8,
+       "shorts": 7,
+       "pnl": 432278.0,
+       "pnl_per_year": 115164.0,
+       "pnl_per_trade": 28818.5,
+       "hit_rate": 0.867,
+       "t_stat": 3.25,
+       "sharpe": 1.59,
+       "max_drawdown": -53782.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 11,
+       "longs": 7,
+       "shorts": 4,
+       "pnl": 28446.0,
+       "pnl_per_year": 8746.0,
+       "pnl_per_trade": 2586.0,
+       "hit_rate": 0.545,
+       "t_stat": 0.38,
+       "sharpe": 0.21,
+       "max_drawdown": -54324.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 30,
+       "trades": 26,
+       "longs": 15,
+       "shorts": 11,
+       "pnl": 460724.0,
+       "pnl_per_year": 63526.0,
+       "pnl_per_trade": 17720.1,
+       "hit_rate": 0.731,
+       "t_stat": 2.8,
+       "sharpe": 1.01,
+       "max_drawdown": -54324.0
+      }
+     },
+     "100% on last 28 days": {
+      "selection": {
+       "from": "2019-03-24",
+       "to": "2022-12-24",
+       "years": 3.8,
+       "decisions": 16,
+       "trades": 15,
+       "longs": 8,
+       "shorts": 7,
+       "pnl": 557371.0,
+       "pnl_per_year": 148490.0,
+       "pnl_per_trade": 37158.0,
+       "hit_rate": 0.867,
+       "t_stat": 3.91,
+       "sharpe": 1.9,
+       "max_drawdown": -46768.0
+      },
+      "holdout": {
+       "from": "2023-03-24",
+       "to": "2026-06-24",
+       "years": 3.3,
+       "decisions": 14,
+       "trades": 11,
+       "longs": 7,
+       "shorts": 4,
+       "pnl": 93083.0,
+       "pnl_per_year": 28618.0,
+       "pnl_per_trade": 8462.1,
+       "hit_rate": 0.636,
+       "t_stat": 1.26,
+       "sharpe": 0.67,
+       "max_drawdown": -45074.0
+      },
+      "all": {
+       "from": "2019-03-24",
+       "to": "2026-06-24",
+       "years": 7.3,
+       "decisions": 30,
+       "trades": 26,
+       "longs": 15,
+       "shorts": 11,
+       "pnl": 650454.0,
+       "pnl_per_year": 89686.0,
+       "pnl_per_trade": 25017.4,
+       "hit_rate": 0.769,
+       "t_stat": 3.74,
+       "sharpe": 1.32,
+       "max_drawdown": -46768.0
+      }
+     }
+    },
+    "recent": [
+     {
+      "date": "2022-12-24",
+      "position": -1.0,
+      "entry": 290.12,
+      "fair": 234.25,
+      "outcome": 135.64,
+      "pnl": 53073.89
+     },
+     {
+      "date": "2023-03-24",
+      "position": -1.0,
+      "entry": 110.94,
+      "fair": 95.83,
+      "outcome": 84.68,
+      "pnl": 23219.8
+     },
+     {
+      "date": "2023-09-24",
+      "position": 1.0,
+      "entry": 94.31,
+      "fair": 111.93,
+      "outcome": 100.53,
+      "pnl": 6060.42
+     },
+     {
+      "date": "2023-12-24",
+      "position": 1.0,
+      "entry": 79.98,
+      "fair": 82.08,
+      "outcome": 69.02,
+      "pnl": -14324.38
+     },
+     {
+      "date": "2024-03-24",
+      "position": -1.0,
+      "entry": 68.67,
+      "fair": 67.16,
+      "outcome": 77.39,
+      "pnl": -13423.16
+     },
+     {
+      "date": "2024-09-24",
+      "position": 1.0,
+      "entry": 84.71,
+      "fair": 94.12,
+      "outcome": 107.35,
+      "pnl": 26137.99
+     },
+     {
+      "date": "2024-12-24",
+      "position": 1.0,
+      "entry": 105.21,
+      "fair": 111.63,
+      "outcome": 116.6,
+      "pnl": 10355.03
+     },
+     {
+      "date": "2025-03-24",
+      "position": -1.0,
+      "entry": 104.28,
+      "fair": 95.08,
+      "outcome": 85.29,
+      "pnl": 17735.84
+     },
+     {
+      "date": "2025-06-24",
+      "position": 1.0,
+      "entry": 92.57,
+      "fair": 98.4,
+      "outcome": 80.08,
+      "pnl": -14032.68
+     },
+     {
+      "date": "2025-09-24",
+      "position": 1.0,
+      "entry": 79.89,
+      "fair": 90.44,
+      "outcome": 75.16,
+      "pnl": -6544.21
+     },
+     {
+      "date": "2025-12-24",
+      "position": 1.0,
+      "entry": 71.27,
+      "fair": 75.49,
+      "outcome": 101.35,
+      "pnl": 41512.07
+     },
+     {
+      "date": "2026-06-24",
+      "position": -1.0,
+      "entry": 108.7,
+      "fair": 103.97,
+      "outcome": 156.04,
+      "pnl": -44012.92
+     }
+    ]
+   }
+  },
+  "headline_scenario": "power_month"
+ },
+ "recent_trades": [
+  {
+   "date": "2025-09-24",
+   "position": 1.0,
+   "entry": 52.9,
+   "fair": 62.58,
+   "outcome": 72.65,
+   "pnl": 35445.87
+  },
+  {
+   "date": "2025-10-24",
+   "position": -1.0,
+   "entry": 89.28,
+   "fair": 82.88,
+   "outcome": 75.86,
+   "pnl": 13910.94
+  },
+  {
+   "date": "2025-11-24",
+   "position": 1.0,
+   "entry": 78.92,
+   "fair": 87.87,
+   "outcome": 74.77,
+   "pnl": -6533.41
+  },
+  {
+   "date": "2025-12-24",
+   "position": 1.0,
+   "entry": 72.16,
+   "fair": 86.07,
+   "outcome": 97.09,
+   "pnl": 33164.44
+  },
+  {
+   "date": "2026-01-24",
+   "position": 1.0,
+   "entry": 93.63,
+   "fair": 99.98,
+   "outcome": 79.72,
+   "pnl": -15920.64
+  },
+  {
+   "date": "2026-02-24",
+   "position": 1.0,
+   "entry": 75.62,
+   "fair": 87.79,
+   "outcome": 95.49,
+   "pnl": 24951.95
+  },
+  {
+   "date": "2026-03-24",
+   "position": 1.0,
+   "entry": 99.4,
+   "fair": 112.18,
+   "outcome": 82.22,
+   "pnl": -18292.1
+  },
+  {
+   "date": "2026-04-24",
+   "position": 1.0,
+   "entry": 81.47,
+   "fair": 86.28,
+   "outcome": 104.87,
+   "pnl": 27506.01
+  },
+  {
+   "date": "2026-05-24",
+   "position": 1.0,
+   "entry": 104.82,
+   "fair": 109.36,
+   "outcome": 96.19,
+   "pnl": -9183.33
+  },
+  {
+   "date": "2026-06-24",
+   "position": 1.0,
+   "entry": 99.54,
+   "fair": 102.51,
+   "outcome": 106.29,
+   "pnl": 5783.12
+  },
+  {
+   "date": "2026-07-24",
+   "position": -1.0,
+   "entry": 114.61,
+   "fair": 107.0,
+   "outcome": 129.87,
+   "pnl": -14185.34
+  },
+  {
+   "date": "2026-08-24",
+   "position": -1.0,
+   "entry": 136.81,
+   "fair": 122.96,
+   "outcome": 129.58,
+   "pnl": 4556.9
+  }
+ ]
+}
