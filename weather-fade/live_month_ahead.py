@@ -34,6 +34,7 @@ QUOTES = LIVE / "quotes.json"
 LEDGER = LIVE / "month_ahead_trades.csv"
 FAIR_LOG = LIVE / "fair_values.csv"
 PAGE = HERE.parent / "docs" / "month-ahead.html"
+RUN_LOG = LIVE / "last_run.log"                    # committed by the workflow, so failures are readable
 EDIT_URL = "https://github.com/bruno-crosbie/Power-strategies/edit/main/weather-fade/live/quotes.json"
 HOW_TO = ("Type the market price you see for each contract into 'price' (power in GBP/MWh, gas in pence/therm), "
           "then Commit changes. A run starts automatically, compares it with our fair price and logs a paper trade "
@@ -93,15 +94,26 @@ def size_and_cost(market: str, days: int):
 def main():
     today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
     errors = []
+    for src in ("elexon", "gas", "temps"):             # one source failing shouldn't stop the others
+        try:
+            download_all({src})
+        except Exception as e:
+            errors.append(f"{src} download failed: {e!r}")
+    pw = gs = None
     try:
-        download_all({"elexon", "gas", "temps"})
-    except Exception as e:                             # carry on with whatever data is on disk
-        errors.append(f"data refresh failed: {e}")
-    pw, gs = power_inputs(), gas_inputs()
+        pw = power_inputs()
+    except Exception as e:
+        errors.append(f"power data unavailable: {e!r}")
+    try:
+        gs = gas_inputs()
+    except Exception as e:
+        errors.append(f"gas data unavailable: {e!r}")
     contracts = upcoming(today)
 
     fair = {}
     for c in contracts:
+        if (pw if c["market"] == "power" else gs) is None:
+            continue
         days = pd.date_range(c["start"], c["end"], freq="D")
         try:
             f = power_fair(pw, today, days) if c["market"] == "power" else gas_fair(gs, today, days)
@@ -149,9 +161,9 @@ def main():
     # settle trades whose delivery period has finished and has (almost) all its prices
     for i, r in ledger[ledger.status == "open"].iterrows():
         start, end = pd.Timestamp(r.start), pd.Timestamp(r.end)
-        if today <= end:
-            continue
         market = r["product"].split("_")[0]
+        if today <= end or (pw if market == "power" else gs) is None:
+            continue
         series = pw.price if market == "power" else gs.sap
         vals = series.reindex(pd.date_range(start, end, freq="D"))
         if vals.notna().mean() < 0.9:
@@ -162,6 +174,8 @@ def main():
         ledger.loc[i, ["outcome", "pnl_gbp", "status"]] = [round(outcome, 2), round(pnl, 0), "settled"]
     ledger.to_csv(LEDGER, index=False)
     build_page(today, contracts, fair, quotes or {}, ledger, log, errors)
+    RUN_LOG.write_text(f"{pd.Timestamp.now(tz='UTC')}: ok, {len(fair)} fair prices\n" + "".join(f"- {e}\n" for e in errors),
+                       encoding="utf-8")
 
 
 # ------------------------------------------------------------------ page
@@ -229,5 +243,6 @@ if __name__ == "__main__":
     try:
         main()
     except Exception:
+        RUN_LOG.write_text(f"{pd.Timestamp.now(tz='UTC')}: FAILED\n{traceback.format_exc()}", encoding="utf-8")
         traceback.print_exc()
         raise SystemExit(1)
