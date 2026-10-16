@@ -1,7 +1,10 @@
 strategy,period_start,decided_at,position,note,mid,sip,pnl_gross,pnl_net,status
-imbalance_momentum,2026-10-15 23:00:00+00:00,2026-10-15 21:46:49.955080+00:00,1,recent NIV +686 MWh (95% pctile of size),,,,,open
+imbalance_momentum,2026-10-15 23:00:00+00:00,2026-10-15 21:46:49.955080+00:00,1,recent NIV +686 MWh (95% pctile of size),187.93,212.0,12.03,11.03,settled
 remit_outage,2026-10-15 23:00:00+00:00,2026-10-15 21:46:49.955080+00:00,0,no qualifying outage,,,,,flat
 weather_fade,2026-10-15 23:00:00+00:00,2026-10-15 21:46:49.955080+00:00,0,"wind fc 7,967 MW (31% pctile), recent fc error -3,114 MW",,,,,flat
 imbalance_momentum,2026-10-15 23:30:00+00:00,2026-10-15 22:01:30.023088+00:00,0,recent NIV +330 MWh (75% pctile of size),,,,,flat
 remit_outage,2026-10-15 23:30:00+00:00,2026-10-15 22:01:30.023088+00:00,0,no qualifying outage,,,,,flat
 weather_fade,2026-10-15 23:30:00+00:00,2026-10-15 22:01:30.023088+00:00,0,"wind fc 7,967 MW (31% pctile), recent fc error -2,973 MW",,,,,flat
+imbalance_momentum,2026-10-16 03:00:00+00:00,2026-10-16 01:39:08.835153+00:00,0,recent NIV +241 MWh (63% pctile of size),,,,,flat
+remit_outage,2026-10-16 03:00:00+00:00,2026-10-16 01:39:08.835153+00:00,0,no qualifying outage,,,,,flat
+weather_fade,2026-10-16 03:00:00+00:00,2026-10-16 01:39:08.835153+00:00,0,"wind fc 7,530 MW (29% pctile), recent fc error -1,740 MW",,,,,flat
