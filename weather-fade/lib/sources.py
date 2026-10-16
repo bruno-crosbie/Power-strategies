@@ -130,15 +130,21 @@ def forecast_archive(sites: dict, var: str, name: str, models=FORECAST_MODELS) -
 
 
 def actual_temperatures(cities: dict, name: str, start="2018-01-01") -> pd.DataFrame:
-    """Observed daily mean temperature (ERA5 reanalysis) per city. Used to fit long-history models;
-    only *forecasts* are used for trading decisions."""
+    """Observed daily mean temperature (ERA5 reanalysis) per city, topped up for the last few days
+    (ERA5 runs ~5 days behind) with the weather models' own recent analysis."""
     end = (pd.Timestamp.now() - pd.Timedelta(days=6)).strftime("%Y-%m-%d")
     frames = []
     for city, (lat, lon) in cities.items():
         d = get("https://archive-api.open-meteo.com/v1/archive",
                 {"latitude": lat, "longitude": lon, "start_date": start, "end_date": end,
                  "daily": "temperature_2m_mean", "timezone": "Europe/London"})["daily"]
-        frames.append(pd.DataFrame({"day": pd.to_datetime(d["time"]), "city": city, "temp": d["temperature_2m_mean"]}))
+        obs = pd.DataFrame({"day": pd.to_datetime(d["time"]), "city": city, "temp": d["temperature_2m_mean"]}).dropna()
+        r = get("https://api.open-meteo.com/v1/forecast",
+                {"latitude": lat, "longitude": lon, "past_days": 14, "forecast_days": 1,
+                 "daily": "temperature_2m_mean", "timezone": "Europe/London"})["daily"]
+        rec = pd.DataFrame({"day": pd.to_datetime(r["time"]), "city": city, "temp": r["temperature_2m_mean"]}).dropna()
+        rec = rec[(rec.day > obs.day.max()) & (rec.day < pd.Timestamp.now().normalize())]
+        frames.append(pd.concat([obs, rec]))
     return save(pd.concat(frames).dropna(), name)
 
 

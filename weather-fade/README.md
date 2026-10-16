@@ -15,6 +15,14 @@ Paper research only: no real money, not financial advice.
 | [`nbp_week_ahead.py`](strategies/nbp_week_ahead.py) | Same for gas, with GB and Continental temperatures plus GB wind | **No signal.** Weather explains little of weekly gas moves |
 | [`weather_month_ahead.py`](strategies/weather_month_ahead.py) | Recent unusual weather won't carry into next month or quarter, so fade a price anchored on recent spot | **Promising.** Beat a spot-anchored price on all 4 products (power/gas × month/quarter) |
 
+## Live: month-ahead fade against real quotes
+
+[`live_month_ahead.py`](live_month_ahead.py) runs on GitHub Actions (daily, and straight after you edit
+[`live/quotes.json`](live/quotes.json)). It prices next month and next quarter for UK power and NBP gas,
+and when you enter the market price you see for a contract, it paper-trades toward our fair price if the
+gap is 2% or more, then settles against the actual average spot price after delivery.
+Page: https://bruno-crosbie.github.io/Power-strategies/month-ahead.html
+
 ## How the week-ahead fade works
 
 1. Every Sunday at 22:00 UTC, take the ECMWF, GFS and ICON forecasts for the next 7 days (wind at 8 GB

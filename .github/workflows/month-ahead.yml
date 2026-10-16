@@ -1,0 +1,44 @@
+name: Month-ahead fade
+
+on:
+  push:                       # runs as soon as you save market prices in quotes.json
+    branches: [main]
+    paths: ["weather-fade/live/quotes.json"]
+  schedule:
+    - cron: "23 7 * * *"      # daily refresh of fair prices and settlement (off the busy top of the hour)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: month-ahead
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r weather-fade/requirements.txt
+
+      - name: Price, trade and settle
+        working-directory: weather-fade
+        run: python live_month_ahead.py
+
+      - name: Save results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add weather-fade/live docs/month-ahead.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Month-ahead fade run $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done

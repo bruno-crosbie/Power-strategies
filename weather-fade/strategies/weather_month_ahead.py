@@ -95,15 +95,33 @@ def periods(freq: str, start="2018-12-01", end=None):
 
 # ------------------------------------------------------------------ predictions
 
+def power_fair(d: pd.DataFrame, t: pd.Timestamp, days: pd.DatetimeIndex, level_days: int = 14) -> float:
+    """Fair average power price over `days`, using only data before decision day t."""
+    model = PriceModel(use_temp=True).fit(d, t, since=str((t - pd.DateOffset(years=3)).date()))
+    L = model.level(d, t, level_days)
+    cf_mu, cf_sd = climatology(d.cf, t, days, "month")
+    h_mu, _ = climatology(d.hdd, t, days, "doy")
+    return L * float(np.mean(model.ratio(cf_mu, cf_sd, h_mu, days.dayofweek.values)))
+
+
+def gas_fair(d: pd.DataFrame, t: pd.Timestamp, days: pd.DatetimeIndex, since: str = "2018-03-01") -> float:
+    """Fair average gas price over `days`, using only data before decision day t. Uses the latest
+    complete 7-day window (the published gas price lags a few days)."""
+    m = GasPriceModel(use_eu=True, use_wind=True, since=since).fit(d, t)
+    w = window_means(d).loc[:t].dropna(subset=["sap", "hdd_gb", "hdd_eu", "cf"])
+    win = w.iloc[-1]
+    g_mu, _ = climatology(d.hdd_gb, t, days, "doy")
+    e_mu, _ = climatology(d.hdd_eu, t, days, "doy")
+    c_mu, _ = climatology(d.cf, t, days, "month")
+    wk = (days.dayofweek >= 5).astype(float) - win.wkend
+    return float(np.mean(m.predict(win.sap, g_mu - win.hdd_gb, e_mu - win.hdd_eu, c_mu - win.cf, wk)))
+
+
 def power_rows(freq: str, level_days: int):
     d = power_inputs()
     rows = []
     for t, days in periods(freq):
-        model = PriceModel(use_temp=True).fit(d, t, since=str((t - pd.DateOffset(years=3)).date()))
-        L = model.level(d, t, level_days)
-        cf_mu, cf_sd = climatology(d.cf, t, days, "month")
-        h_mu, _ = climatology(d.hdd, t, days, "doy")
-        fair = L * float(np.mean(model.ratio(cf_mu, cf_sd, h_mu, days.dayofweek.values)))
+        fair = power_fair(d, t, days, level_days)
         rows.append({"decision": t, "start": days[0], "fair": fair, "unit": "£/MWh",
                      "spot14": d.price[(d.index >= t - pd.Timedelta(days=14)) & (d.index < t)].mean(),
                      "spot28": d.price[(d.index >= t - pd.Timedelta(days=28)) & (d.index < t)].mean(),
@@ -114,16 +132,9 @@ def power_rows(freq: str, level_days: int):
 
 def gas_rows(freq: str, since: str):
     d = gas_inputs()
-    w = window_means(d)
     rows = []
     for t, days in periods(freq):
-        m = GasPriceModel(use_eu=True, use_wind=True, since=since).fit(d, t)
-        win = w.loc[:t].iloc[-1]                                       # last 7 full days before t
-        g_mu, _ = climatology(d.hdd_gb, t, days, "doy")
-        e_mu, _ = climatology(d.hdd_eu, t, days, "doy")
-        c_mu, _ = climatology(d.cf, t, days, "month")
-        wk = (days.dayofweek >= 5).astype(float) - win.wkend
-        fair = float(np.mean(m.predict(win.sap, g_mu - win.hdd_gb, e_mu - win.hdd_eu, c_mu - win.cf, wk)))
+        fair = gas_fair(d, t, days, since)
         rows.append({"decision": t, "start": days[0], "fair": fair, "unit": "p/therm",
                      "spot14": d.sap[(d.index >= t - pd.Timedelta(days=14)) & (d.index < t)].mean(),
                      "spot28": d.sap[(d.index >= t - pd.Timedelta(days=28)) & (d.index < t)].mean(),
