@@ -1,1 +1,5 @@
 contract,product,start,end,decided_at,quote,fair,spot14,edge_pct,position,status,outcome,pnl_gbp,note
+power_month 2026-11,power_month,2026-11-01,2026-11-30,2026-10-18 21:30:00+00:00,169.2,163.84,143.4,-3.17,-1,open,,,sell: fair below market
+gas_month 2026-11,gas_month,2026-11-01,2026-11-30,2026-10-18 21:30:00+00:00,216.4,214.16,187.69,-1.04,0,no trade,,,gap under 2% - no trade
+power_quarter 2027-Q1,power_quarter,2027-01-01,2027-03-31,2026-10-18 21:30:00+00:00,175.53,168.3,143.4,-4.12,-1,open,,,"sell: fair below market (from monthly prices 2027-01: 183.98, 2027-02: 180.48, 2027-03: 162.61)"
+gas_quarter 2027-Q1,gas_quarter,2027-01-01,2027-03-31,2026-10-18 21:30:00+00:00,217.0,222.35,187.69,2.47,1,open,,,"buy: fair above market (from monthly prices 2027-01: 221.34, 2027-02: 220.1, 2027-03: 209.85)"
