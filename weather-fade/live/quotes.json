@@ -2,14 +2,14 @@
   "how_to_use": "For each contract, look up the TradingView symbol shown in 'tradingview' (ICE Endex futures: UBL = UK baseload power in GBP/MWh, GWM = NBP gas in pence/therm). Month contracts: type the price into 'price'. Quarters: TradingView only lists months, so type each month's price into 'months' and the quarter price is worked out for you (day-weighted average). Then Commit changes: a run starts automatically and logs a paper trade if our fair price differs by 2% or more. Only the first price entered for a contract counts, and it must be entered before delivery starts. Keep the quotes and commas exactly as they are; leave null to skip.",
   "contracts": {
     "power_month 2026-11": {
-      "price": null,
+      "price": 169.2,
       "unit": "GBP/MWh",
       "what": "UK baseload power, 2026-11",
       "trade_by": "2026-10-31",
       "tradingview": "UBLX2026"
     },
     "gas_month 2026-11": {
-      "price": null,
+      "price": 216.4,
       "unit": "p/therm",
       "what": "NBP gas, 2026-11",
       "trade_by": "2026-10-31",
@@ -22,9 +22,9 @@
       "trade_by": "2026-12-31",
       "tradingview": "UBLF2027, UBLG2027, UBLH2027 (enter each month below)",
       "months": {
-        "2027-01": null,
-        "2027-02": null,
-        "2027-03": null
+        "2027-01": 183.98,
+        "2027-02": 180.48,
+        "2027-03": 162.61
       }
     },
     "gas_quarter 2027-Q1": {
@@ -34,9 +34,9 @@
       "trade_by": "2026-12-31",
       "tradingview": "GWMF2027, GWMG2027, GWMH2027 (enter each month below)",
       "months": {
-        "2027-01": null,
-        "2027-02": null,
-        "2027-03": null
+        "2027-01": 221.34,
+        "2027-02": 220.1,
+        "2027-03": 209.85
       }
     }
   }
