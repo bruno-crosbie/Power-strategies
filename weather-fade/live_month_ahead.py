@@ -36,10 +36,14 @@ FAIR_LOG = LIVE / "fair_values.csv"
 PAGE = HERE.parent / "docs" / "month-ahead.html"
 RUN_LOG = LIVE / "last_run.log"                    # committed by the workflow, so failures are readable
 EDIT_URL = "https://github.com/bruno-crosbie/Power-strategies/edit/main/weather-fade/live/quotes.json"
-HOW_TO = ("Type the market price you see for each contract into 'price' (power in GBP/MWh, gas in pence/therm), "
-          "then Commit changes. A run starts automatically, compares it with our fair price and logs a paper trade "
-          "if they differ by 2% or more. Only the first price entered for a contract counts, and it must be entered "
-          "before delivery starts. Keep the quotes and commas exactly as they are; leave null to skip.")
+HOW_TO = ("For each contract, look up the TradingView symbol shown in 'tradingview' (ICE Endex futures: UBL = UK "
+          "baseload power in GBP/MWh, GWM = NBP gas in pence/therm). Month contracts: type the price into 'price'. "
+          "Quarters: TradingView only lists months, so type each month's price into 'months' and the quarter price is "
+          "worked out for you (day-weighted average). Then Commit changes: a run starts automatically and logs a paper "
+          "trade if our fair price differs by 2% or more. Only the first price entered for a contract counts, and it "
+          "must be entered before delivery starts. Keep the quotes and commas exactly as they are; leave null to skip.")
+MONTH_CODES = "FGHJKMNQUVXZ"                       # exchange month letters, Jan..Dec
+TV_ROOT = {"power": "UBL", "gas": "GWM"}            # TradingView / ICE Endex roots
 LEDGER_COLS = ["contract", "product", "start", "end", "decided_at", "quote", "fair", "spot14", "edge_pct", "position",
                "status", "outcome", "pnl_gbp", "note"]
 
@@ -54,13 +58,28 @@ def upcoming(today: pd.Timestamp) -> list[dict]:
                ("quarter", q0, q0 + pd.offsets.QuarterEnd(0), f"{q0.year}-Q{q0.quarter}")]
     out = []
     for kind, start, end, label in periods:
+        months = pd.date_range(start, end, freq="MS")
         for market in ("power", "gas"):
+            symbols = [f"{TV_ROOT[market]}{MONTH_CODES[m.month - 1]}{m.year}" for m in months]
             out.append({"contract": f"{market}_{kind} {label}", "product": f"{market}_{kind}", "market": market,
-                        "start": start, "end": end,
+                        "start": start, "end": end, "months": [m.strftime("%Y-%m") for m in months],
                         "unit": "GBP/MWh" if market == "power" else "p/therm",
-                        "what": (f"UK baseload power, {label}" if market == "power" else f"NBP gas, {label}")
-                                + (" (e.g. ICE UK Base Load futures)" if market == "power" else " (e.g. ICE UK NBP futures)")})
+                        "what": f"UK baseload power, {label}" if market == "power" else f"NBP gas, {label}",
+                        "tradingview": ", ".join(symbols) + ("" if kind == "month" else " (enter each month below)")})
     return out
+
+
+def quote_price(q: dict, c: dict | None):
+    """The contract price from a quotes.json entry: 'price', or for a quarter the day-weighted average of its
+    monthly prices once all are filled in. Returns (price or None, note)."""
+    if q.get("price") not in (None, ""):
+        return float(q["price"]), ""
+    months = q.get("months") or {}
+    if not months or any(v in (None, "") for v in months.values()):
+        return None, ""
+    days = {m: pd.Period(m, "M").days_in_month for m in months}
+    avg = sum(float(v) * days[m] for m, v in months.items()) / sum(days.values())
+    return round(avg, 2), "from monthly prices " + ", ".join(f"{m}: {v}" for m, v in months.items())
 
 
 def read_quotes() -> tuple[dict, str]:
@@ -75,8 +94,12 @@ def read_quotes() -> tuple[dict, str]:
 def write_quotes(quotes: dict, contracts: list[dict]):
     """Add blank entries for new contracts; keep everything the user typed."""
     for c in contracts:
-        quotes.setdefault(c["contract"], {"price": None, "unit": c["unit"], "what": c["what"],
-                                          "trade_by": str((c["start"] - pd.Timedelta(days=1)).date())})
+        q = quotes.setdefault(c["contract"], {})
+        q.setdefault("price", None)
+        q["unit"], q["what"], q["tradingview"] = c["unit"], c["what"], c["tradingview"]
+        q["trade_by"] = str((c["start"] - pd.Timedelta(days=1)).date())
+        if c["product"].endswith("quarter"):
+            q.setdefault("months", {m: None for m in c["months"]})
     QUOTES.write_text(json.dumps({"how_to_use": HOW_TO, "contracts": quotes}, indent=2, ensure_ascii=False) + "\n",
                       encoding="utf-8")
 
@@ -136,13 +159,14 @@ def main():
     else:
         by_name = {c["contract"]: c for c in contracts}
         for name, q in quotes.items():
-            price = q.get("price") if isinstance(q, dict) else None
-            if price in (None, "") or name in set(ledger.contract):
+            if not isinstance(q, dict) or name in set(ledger.contract):
                 continue
             try:
-                price = float(price)
+                price, how = quote_price(q, by_name.get(name))
             except (TypeError, ValueError):
-                errors.append(f"{name}: price '{price}' is not a number"); continue
+                errors.append(f"{name}: a price isn't a number - check what you typed"); continue
+            if price is None:
+                continue
             c = by_name.get(name)
             if c is None or name not in fair:   # delivery already started (or fair price unavailable)
                 errors.append(f"{name}: quote seen too late (delivery started or contract no longer upcoming) - not traded"); continue
@@ -155,7 +179,7 @@ def main():
                 "spot14": fair[name]["spot14"], "edge_pct": round(edge * 100, 2), "position": pos,
                 "status": "open" if pos else "no trade", "outcome": np.nan, "pnl_gbp": np.nan,
                 "note": ("buy: fair above market" if pos > 0 else "sell: fair below market" if pos < 0
-                         else f"gap under {MIN_EDGE_PCT:.0%} - no trade")}
+                         else f"gap under {MIN_EDGE_PCT:.0%} - no trade") + (f" ({how})" if how else "")}
         write_quotes(quotes, contracts)
 
     # settle trades whose delivery period has finished and has (almost) all its prices
@@ -187,12 +211,15 @@ def build_page(today, contracts, fair, quotes, ledger, log, errors):
     for c in contracts:
         k = c["contract"]
         f = fair.get(k, {})
-        q = (quotes.get(k) or {}).get("price")
+        try:
+            q, _ = quote_price(quotes.get(k) or {}, c)
+        except (TypeError, ValueError):
+            q = None
         traded = ledger[ledger.contract == k]
-        status = traded.iloc[0].note if len(traded) else ("waiting for your quote" if q in (None, "") else "will trade next run")
-        rows += (f"<tr><td><b>{c['what'].split(' (')[0]}</b><div class='muted'>trade by {(c['start'] - pd.Timedelta(days=1)).date()}</div></td>"
-                 f"<td>{f.get('fair', '–')}</td><td>{f.get('spot14', '–')}</td><td>{q if q not in (None, '') else '–'}</td>"
-                 f"<td>{c['unit']}</td><td>{status}</td></tr>")
+        status = traded.iloc[0].note if len(traded) else ("waiting for your quote" if q is None else "will trade next run")
+        rows += (f"<tr><td><b>{c['what']}</b><div class='muted'>trade by {(c['start'] - pd.Timedelta(days=1)).date()}</div></td>"
+                 f"<td>{c['tradingview']}</td><td>{f.get('fair', '–')}</td><td>{f.get('spot14', '–')}</td>"
+                 f"<td>{q if q is not None else '–'}</td><td>{c['unit']}</td><td>{status}</td></tr>")
     trades = ""
     for _, r in ledger.sort_values("decided_at", ascending=False).iterrows():
         side = {1: "Buy", -1: "Sell", 0: "–"}.get(int(r.position), "–")
@@ -220,7 +247,7 @@ a{{color:var(--accent)}}.btn{{display:inline-block;background:var(--accent);colo
 {f'<div class="card warn"><b>Needs attention</b><ul>{err}</ul></div>' if err else ''}
 <div class="card"><h2>Fair prices right now</h2>
 <p class="muted">Our fair price assumes the recent weather won't carry on and next period's weather is normal for the time of year. The 14-day spot average is what a market anchored on recent prices would lean toward.</p>
-<table><thead><tr><th>Contract</th><th>Our fair price</th><th>Last 14 days' spot</th><th>Your quote</th><th>Unit</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table>
+<table><thead><tr><th>Contract</th><th>TradingView symbol</th><th>Our fair price</th><th>Last 14 days' spot</th><th>Your quote</th><th>Unit</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table>
 <p style="margin-top:12px"><a class="btn" href="{EDIT_URL}">Enter market prices</a></p>
 <p class="muted">Opens quotes.json on GitHub: type the prices you see into "price", then <b>Commit changes</b>. A run starts within a minute or two; refresh this page after ~3 minutes.</p></div>
 <div class="card"><h2>Trades</h2><p class="muted">{settled} settled · total {money(total)} · power 1 MW baseload, gas 25,000 therms/day · costs £1/MWh and 0.5p/therm</p>
