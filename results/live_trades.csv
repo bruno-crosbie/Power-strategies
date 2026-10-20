@@ -98,3 +98,6 @@ weather_fade,2026-10-20 18:00:00+00:00,2026-10-20 16:59:29.056731+00:00,0,"wind 
 imbalance_momentum,2026-10-20 22:00:00+00:00,2026-10-20 20:33:29.712095+00:00,0,recent NIV +31 MWh (12% pctile of size),,,,,flat
 remit_outage,2026-10-20 22:00:00+00:00,2026-10-20 20:33:29.712095+00:00,0,no qualifying outage,,,,,flat
 weather_fade,2026-10-20 22:00:00+00:00,2026-10-20 20:33:29.712095+00:00,0,"wind fc 14,373 MW (70% pctile), recent fc error -4,779 MW",,,,,flat
+imbalance_momentum,2026-10-21 00:30:00+00:00,2026-10-20 23:23:58.714656+00:00,0,recent NIV -26 MWh (10% pctile of size),,,,,flat
+remit_outage,2026-10-21 00:30:00+00:00,2026-10-20 23:23:58.714656+00:00,0,no qualifying outage,,,,,flat
+weather_fade,2026-10-21 00:30:00+00:00,2026-10-20 23:23:58.714656+00:00,0,"wind fc 13,624 MW (67% pctile), recent fc error -3,968 MW",,,,,flat
