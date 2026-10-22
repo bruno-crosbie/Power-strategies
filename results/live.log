@@ -42,3 +42,4 @@
 2026-10-22 04:45:16,542 decided 2026-10-22 06:00:00+00:00: {'weather_fade': 0, 'remit_outage': 0, 'imbalance_momentum': 0}
 2026-10-22 10:07:25,052 decided 2026-10-22 11:30:00+00:00: {'weather_fade': 0, 'remit_outage': 0, 'imbalance_momentum': 0}
 2026-10-22 15:13:41,070 decided 2026-10-22 16:30:00+00:00: {'weather_fade': 0, 'remit_outage': 0, 'imbalance_momentum': -1}
+2026-10-22 19:29:26,373 decided 2026-10-22 20:30:00+00:00: {'weather_fade': 0, 'remit_outage': 0, 'imbalance_momentum': 0}
