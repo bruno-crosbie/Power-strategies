@@ -143,3 +143,6 @@ weather_fade,2026-10-23 07:30:00+00:00,2026-10-23 06:28:04.408496+00:00,0,"wind 
 imbalance_momentum,2026-10-23 13:30:00+00:00,2026-10-23 12:05:33.680712+00:00,0,recent NIV -135 MWh (45% pctile of size),,,,,flat
 remit_outage,2026-10-23 13:30:00+00:00,2026-10-23 12:05:33.680712+00:00,0,no qualifying outage,,,,,flat
 weather_fade,2026-10-23 13:30:00+00:00,2026-10-23 12:05:33.680712+00:00,0,"wind fc 9,534 MW (39% pctile), recent fc error -923 MW",,,,,flat
+imbalance_momentum,2026-10-23 18:30:00+00:00,2026-10-23 17:01:47.036873+00:00,0,recent NIV +413 MWh (88% pctile of size),,,,,flat
+remit_outage,2026-10-23 18:30:00+00:00,2026-10-23 17:01:47.036873+00:00,0,T_HUMR-1 Fossil Gas -842 MW,,,,,flat
+weather_fade,2026-10-23 18:30:00+00:00,2026-10-23 17:01:47.036873+00:00,0,"wind fc 13,372 MW (63% pctile), recent fc error -1,409 MW",,,,,flat
